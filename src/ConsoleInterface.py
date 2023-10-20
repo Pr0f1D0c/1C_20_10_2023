@@ -110,6 +110,16 @@ class ConsoleInterface:
         else:
             print("Список персонажей пуст.")
 
+    # Метод для вывода списка актуальных персонажей
+    def display_latest_characters(self):
+        self.characters = latest_characters = self._db_manager.get_characters_with_latest_locations()
+        if latest_characters:
+            print("Список актуальных меток персонажей:")
+            for char_id, char_name in latest_characters.items():
+                print(f"{char_id}: {char_name}")
+        else:
+            print("Нет актуальных персонажей с геометками.")
+
     def run(self):
         while True:
             print("\nВыберите действие:")
@@ -118,7 +128,8 @@ class ConsoleInterface:
             print("3. Вывести все геометки")
             print("4. Вывести геометки персонажа")
             print("5. Вывести список персонажей")
-            print("6. Выйти")
+            print("6. Вывести актуальных персонажей")
+            print("7. Выйти")
 
             choice = input("Введите номер действия: ")
             if choice == "1":
@@ -134,6 +145,8 @@ class ConsoleInterface:
             elif choice == "5":
                 self.display_character_list()
             elif choice == "6":
+                self.display_latest_characters()
+            elif choice == "7":
                 break
             else:
                 print("Неверный выбор. Пожалуйста, выберите действие снова.")

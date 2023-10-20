@@ -74,6 +74,30 @@ class DatabaseManager:
                         characters[int(char_id)] = Character(char_name, int(char_id))
         return characters
 
+    # Метод для получения словаря персонажей с актуальными геометками
+    def get_characters_with_latest_locations(self):
+        # Загружаем все геометки
+        all_locations_df = pd.read_csv(self._db_file_path)
+
+        if all_locations_df.empty:
+            return {}
+
+        # Сгруппируйте по 'CharId' и найдите максимальное значение 'timestamp' для каждой группы
+        max_timestamp_df = all_locations_df.groupby('CharacterID')['Timestamp'].max().reset_index()
+
+        # Объедините исходный DataFrame с максимальными timestamp'ами, чтобы получить соответствующие координаты
+        result_df = all_locations_df.merge(max_timestamp_df, on=['CharacterID', 'Timestamp'], how='inner')
+
+        # Преобразуйте результат в словарь
+        result_dict = {}
+        for char_id, char_name, timestamp, location, latitude, longitude in result_df[
+            ['CharacterID', 'CharacterName', 'Timestamp', 'Location', 'Latitude', 'Longitude']
+        ].values:
+            result_dict[char_id] = Character(char_name, char_id, last_seen_time=timestamp,
+                                             location=location, latitude=latitude, longitude=longitude)
+
+        return result_dict
+
 
 # Пример использования класса DatabaseManager
 if __name__ == '__main__':
