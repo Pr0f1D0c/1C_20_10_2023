@@ -25,8 +25,8 @@ class CharacterMap:
                 if len(df) > 1:
                     sorted_df = df.sort_values(by='time')
                     folium.PolyLine(list(zip(sorted_df['lat'], sorted_df['long'])), color="blue", weight=2.5, opacity=1).add_to(m)
-                    for lat, lon in zip(sorted_df['lat'], sorted_df['long']):
-                        folium.Marker([lat, lon], popup=character.name).add_to(m)
+                for lat, lon in zip(df['lat'], df['long']):
+                    folium.Marker([lat, lon], popup=character.name).add_to(m)
 
         m.save(map_file_path)
 
