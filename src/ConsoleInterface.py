@@ -7,8 +7,8 @@ from DatabaseManager import DatabaseManager
 class ConsoleInterface:
     def __init__(self, db_manager: DatabaseManager):
         self._db_manager = db_manager
-        self._character_counter: int = 1
-        self.characters = db_manager.load_characters_from_file()
+        self.characters: dict[int, Character] = db_manager.load_characters_from_file()
+        self._character_counter: int = len(self.characters) + 1
 
         # Метод для создания персонажа
 
@@ -38,12 +38,13 @@ class ConsoleInterface:
 
         # Сохраняем нового персонажа в базу данных и словарь персонажей
         self._db_manager.add_character_to_file(new_character)
-        self.characters[char_id] = name
+        self._db_manager.save_location(new_character)
+        self.characters[char_id] = new_character
 
-        return
+        return new_character
 
     # Метод для добавления метки персонажу
-    def add_location(self, character: Character):
+    def add_location(self):
         print("Выберите персонажа для добавления метки:")
         for char_id, char_name in self.characters.items():
             print(f"{char_id}: {char_name}")
@@ -54,7 +55,7 @@ class ConsoleInterface:
             return
 
         if char_id_to_update in self.characters:
-            selected_character = character  # Персонаж, для которого обновляем локацию
+            selected_character = self.characters[char_id_to_update]  # Персонаж, для которого обновляем локацию
             print(f"Добавление метки для персонажа {selected_character.name} (ID: {selected_character.char_id}):")
             location = input("Локация: ").strip() or None
             latitude = input("Широта: ").strip()
@@ -80,3 +81,21 @@ class ConsoleInterface:
             self._db_manager.save_location(selected_character)
         else:
             print(f"Персонаж с номером {char_id_to_update} не найден.")
+
+    def run(self):
+        while True:
+            print("\nВыберите действие:")
+            print("1. Создать персонажа")
+            print("2. Добавить метку персонажу")
+            print("3. Выйти")
+
+            choice = input("Введите номер действия: ")
+            if choice == "1":
+                new_character = self.create_character()
+                print(f"Персонаж {new_character.name} (ID: {new_character.char_id}) создан.")
+            elif choice == "2":
+                self.add_location()
+            elif choice == "3":
+                break
+            else:
+                print("Неверный выбор. Пожалуйста, выберите действие снова.")

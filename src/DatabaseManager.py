@@ -63,7 +63,7 @@ class DatabaseManager:
         with open(self._characters_file_path, 'a') as characters_file:
             characters_file.write(f"{character.char_id} - {character.name}\n")
 
-    def load_characters_from_file(self):
+    def load_characters_from_file(self) -> dict[int, Character]:
         characters = {}
         if os.path.exists(self._characters_file_path):
             with open(self._characters_file_path, 'r') as characters_file:
@@ -71,7 +71,7 @@ class DatabaseManager:
                     parts = line.strip().split(' - ')
                     if len(parts) == 2:
                         char_id, char_name = parts
-                        characters[int(char_id)] = char_name
+                        characters[int(char_id)] = Character(char_name, char_id)
         return characters
 
 
