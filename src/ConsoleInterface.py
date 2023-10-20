@@ -82,12 +82,43 @@ class ConsoleInterface:
         else:
             print(f"Персонаж с номером {char_id_to_update} не найден.")
 
+    def display_all_locations(self):
+        locations_df = self._db_manager.get_all_locations()
+        if not locations_df.empty:
+            print("Все геометки:")
+            print(locations_df)
+        else:
+            print("Нет доступных геометок.")
+
+    def display_character_locations(self, character_number):
+        if character_number in self.characters:
+            character = self.characters[character_number]
+            locations_df = self._db_manager.get_locations_by_character(character)
+            if not locations_df.empty:
+                print(f"Геометки для персонажа {character.name} (ID: {character.char_id}):")
+                print(locations_df)
+            else:
+                print(f"Нет доступных геометок для персонажа {character.name} (ID: {character.char_id}).")
+        else:
+            print(f"Персонаж с номером {character_number} не найден.")
+
+    def display_character_list(self):
+        if self.characters:
+            print("Список персонажей:")
+            for char_id, char_name in self.characters.items():
+                print(f"{char_id}: {char_name}")
+        else:
+            print("Список персонажей пуст.")
+
     def run(self):
         while True:
             print("\nВыберите действие:")
             print("1. Создать персонажа")
             print("2. Добавить метку персонажу")
-            print("3. Выйти")
+            print("3. Вывести все геометки")
+            print("4. Вывести геометки персонажа")
+            print("5. Вывести список персонажей")
+            print("6. Выйти")
 
             choice = input("Введите номер действия: ")
             if choice == "1":
@@ -96,6 +127,13 @@ class ConsoleInterface:
             elif choice == "2":
                 self.add_location()
             elif choice == "3":
+                self.display_all_locations()
+            elif choice == "4":
+                character_number = int(input("Введите номер персонажа: "))
+                self.display_character_locations(character_number)
+            elif choice == "5":
+                self.display_character_list()
+            elif choice == "6":
                 break
             else:
                 print("Неверный выбор. Пожалуйста, выберите действие снова.")

@@ -71,7 +71,7 @@ class DatabaseManager:
                     parts = line.strip().split(' - ')
                     if len(parts) == 2:
                         char_id, char_name = parts
-                        characters[int(char_id)] = Character(char_name, char_id)
+                        characters[int(char_id)] = Character(char_name, int(char_id))
         return characters
 
 
