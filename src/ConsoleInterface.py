@@ -2,6 +2,7 @@ from datetime import datetime
 
 from Character import Character
 from DatabaseManager import DatabaseManager
+from CharacterMap import CharacterMap
 
 
 class ConsoleInterface:
@@ -120,6 +121,13 @@ class ConsoleInterface:
         else:
             print("Нет актуальных персонажей с геометками.")
 
+    # Метод для генерации и сохранения карты актуальных персонажей
+    def generate_character_map(self):
+        character_map = CharacterMap(self._db_manager)
+        map_file_path = '../maps/character_map.html'
+        character_map.generate_map(map_file_path)
+        print(f"Карта актуальных персонажей сохранена в файл: {map_file_path}")
+
     def run(self):
         while True:
             print("\nВыберите действие:")
@@ -129,7 +137,8 @@ class ConsoleInterface:
             print("4. Вывести геометки персонажа")
             print("5. Вывести список персонажей")
             print("6. Вывести актуальных персонажей")
-            print("7. Выйти")
+            print("7. Сгенерировать карту актуальных персонажей")
+            print("8. Выйти")
 
             choice = input("Введите номер действия: ")
             if choice == "1":
@@ -147,6 +156,8 @@ class ConsoleInterface:
             elif choice == "6":
                 self.display_latest_characters()
             elif choice == "7":
+                self.generate_character_map()
+            elif choice == "8":
                 break
             else:
                 print("Неверный выбор. Пожалуйста, выберите действие снова.")
