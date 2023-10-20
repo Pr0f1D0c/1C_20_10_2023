@@ -1,0 +1,10 @@
+LabelNumber,CharacterID,CharacterName,Timestamp,Location,Latitude,Longitude
+0,1,Gandalf,,Moscow,,
+1,1,Гендальф,,ньюШир,0.0,0.0
+2,2,Иван,,1С,1.0,1.0
+3,3,Frodo,,London,51.509865,-0.118092
+4,4,Sam,,Paris,48.856613,2.352222
+5,5,Aragorn,,Berlin,52.520008,13.404954
+6,6,Legolas,,Madrid,40.416775,-3.703790
+7,7,Gimli,,Rome,41.902784,12.496366
+8,8,Саурон,,Афинаы,37.9838,37.9838
